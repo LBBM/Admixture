@@ -1,10 +1,44 @@
 
 library(RColorBrewer)
+library(ggplot2)
 
 data<- read.delim("data_admixture.5.Q.txt", sep = "", header = T)
 rownames(data)<- data[,7]
 data<- data[,-7]
 head(data)
+
+#Pie Plot
+df<-as.data.frame(table(data$POP))
+head(df)
+df<- subset(df, Var1 %in% c("AFR", "EUR", "SAS", "EAS", "NAM"))
+df
+# Compute percentages
+df$fraction = df$Freq / sum(df$Freq)
+
+# Compute the cumulative percentages (top of each rectangle)
+df$ymax = cumsum(df$fraction)
+
+# Compute the bottom of each rectangle
+df$ymin = c(0, head(df$ymax, n=-1))
+
+# Compute label position
+df$labelPosition <- (df$ymax + df$ymin) / 2
+
+# Compute a good label
+df$label <- paste0(df$Var1, "\n value: ", df$Freq)
+
+# Make the plot
+ggplot(df, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill=Var1)) +
+  geom_rect() +
+  geom_text( x=1.8, aes(y=labelPosition, label=label), size=5) + # x here controls label position (inner / outer)
+  scale_fill_brewer(palette=5) +
+  scale_color_brewer(palette=5) +
+  coord_polar(theta="y") +
+  xlim(c(-1, 4)) +
+  theme_void() +
+  theme(legend.position = "none")
+
+
 
 mm<- t(as.matrix(data[,c(1:5)]))
 barplot(mm,col=rainbow(5),xlab="Individual #", ylab="Ancestry",border=NA)
@@ -17,10 +51,6 @@ library(ggpubr)
 
 data_cor<- read.delim("data_cor_r.txt", sep = "", header = T)
 head(data_cor)
-
-
-
-
 
 df<- data_cor[,c(1,2)]
 colnames(df)<- c("x","y")
@@ -100,3 +130,12 @@ p5
 ggarrange(p1, p2, p3, p4, p5 + rremove("x.text"), 
           labels = c("A", "B", "C", "D" ,"E"),
           ncol = 2, nrow = 3)
+
+
+
+
+
+
+
+
+
