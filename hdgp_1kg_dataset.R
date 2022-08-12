@@ -1,41 +1,33 @@
+oneG<- read.table("oneGsamples_relat.txt")
+oneG<-oneG[,1]
+oneG
 
-# library
-library(tidyverse)
-library(dplyr)
+all_oneGpopselect<- read.delim("oneG_dataset.txt", header = T)
+head(all_oneGpopselect)
+dim(all_oneGpopselect)
+oneG_pop_select <- all_oneGpopselect[!all_oneGpopselect$Sample.name %in% oneG, ]
+head(oneG_pop_select)
+dim(oneG_pop_select)
+
+write.csv(oneG_pop_select, "oneG_pop_select.csv",  row.names=FALSE, quote=FALSE)
 
 
-# Create dataset
+names(oneG_pop_select)
 
-data<- read.delim("data_admixture.5.Q.txt", sep = "", header = T)
-rownames(data)<- data[,7]
-data<- data[,-7]
-head(data)
+df<-as.data.frame(table(oneG_pop_select$Population.name))
 
-hdgp<- read.csv("hdpg_data.txt", sep = "\t", header = T)
-head(hdgp)
-
-my_painel_hdgp<- rownames(data)
-my_reference<- subset(hdgp, Sample.name %in% my_painel_hdgp)
-dim(my_reference)
-head(my_reference)
-
-write.csv(my_reference, "output_2.csv",  row.names=FALSE, quote=FALSE)
-
-df<-as.data.frame(table(my_reference$Population.name))
+write.csv(df, "oneG_df.csv",  row.names=FALSE, quote=FALSE)
 df
 
-write.csv(df, "output.csv", row.names=FALSE, quote=FALSE) 
-
-superpop<- read.csv("superpop.txt", header = F)
-superpop
-
-df<- cbind(df, superpop)
-names(df)
-df = df %>% arrange(V1, Freq)
+superpop_names<- c("AFR","EUR","AMR","SAS","EUR","SAS","AMR","AMR","AMR","SAS","EUR","AFR")
+df<- cbind(df, superpop_names)
+df
+df = df %>% arrange(superpop_names, Freq)
+colnames(df)<- c("Var1", "Freq", "V1")
+write.csv(df, "oneG_df_select.csv",  row.names=FALSE, quote=FALSE)
 df
 
-
-# Set a number of 'empty bar' to add at the end of each group
+library(ggplot2)
 empty_bar <- 3
 to_add <- data.frame(matrix(NA, empty_bar*nlevels(df$V1), ncol(df)))
 colnames(to_add) <- colnames(df)
