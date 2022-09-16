@@ -12,7 +12,7 @@ hdgp_list_filtpop <- hdgp_list[hdgp_list$Population.name %in% poplist_v,]
 head(hdgp_list_filtpop, 50)
 dim(hdgp_list_filtpop)
 
-write.csv(hdgp_list_filtpop[,1], "samplelist_hdgp_filt_pop.txt",  row.names=FALSE, quote=FALSE)
+#write.csv(hdgp_list_filtpop[,1], "samplelist_hdgp_filt_pop.txt",  row.names=FALSE, quote=FALSE)
 
 
 
@@ -22,33 +22,6 @@ data <- data.frame(
   group=c("Africa (HGDP)", "America (HGDP)", "East Asia (HGDP)", "Europe (HGDP)"),
   value=c(38,51,57,76)
 )
-
-library(ggplot2)
-library(dplyr)
-
-
-p1=ggplot(data, aes(x = "", y = value, fill = group)) +
-  geom_col(color = "black") +
-  geom_text(aes(label = value),
-            position = position_stack(vjust = 0.5)) +
-  coord_polar(theta = "y") +
-  scale_fill_brewer() +
-  theme_void()
-
-table(hdgp_list_filtpop$Population.name)
-table(hdgp_list_filtpop$Superpopulation.name)
-
-data <- data.frame(
-  group=c("Basque ", "Colombian", "French", "Europe (HGDP)"),
-  value=c(38,51,57,76)
-)
-p2=ggplot(data, aes(x = "", y = value, fill = group)) +
-  geom_col(color = "black") +
-  geom_text(aes(label = value),
-            position = position_stack(vjust = 0.5)) +
-  coord_polar(theta = "y") +
-  scale_fill_brewer() +
-  theme_void()
 
 
 library(treemap)
@@ -77,8 +50,36 @@ treemap(data, index=c("group","subgroup"),
         border.col=c("black","white"),             # Color of borders of groups, of subgroups, of subsubgroups ....
         border.lwds=c(3,2),                        # Width of colors
         title="HDGP", 
-        fontsize.title=12
+        fontsize.title=12,
+        palette = "Set1",
         
         
 )
+
+library(ggplot2)
+library(dplyr)
+
+
+p1=ggplot(data, aes(x = "", y = value, fill = group)) +
+  geom_col(color = "black") +
+  geom_text(aes(label = value),
+            position = position_stack(vjust = 0.5)) +
+  coord_polar(theta = "y") +
+  scale_fill_brewer() +
+  theme_void()
+
+table(hdgp_list_filtpop$Population.name)
+table(hdgp_list_filtpop$Superpopulation.name)
+
+data <- data.frame(
+  group=c("Basque ", "Colombian", "French", "Europe (HGDP)"),
+  value=c(38,51,57,76)
+)
+p2=ggplot(data, aes(x = "", y = value, fill = group)) +
+  geom_col(color = "black") +
+  geom_text(aes(label = value),
+            position = position_stack(vjust = 0.5)) +
+  coord_polar(theta = "y") +
+  scale_fill_brewer() +
+  theme_void()
   

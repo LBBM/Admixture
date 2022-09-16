@@ -29,7 +29,7 @@ head(otg_list_nonrel_filtpop, 50)
 dim(otg_list_nonrel_filtpop)
 
 
-write.csv(otg_list_nonrel_filtpop[,1], "samplelist_onetg_filt_nonrel_pop.txt",  row.names=FALSE, quote=FALSE)
+#write.csv(otg_list_nonrel_filtpop[,1], "samplelist_onetg_filt_nonrel_pop.txt",  row.names=FALSE, quote=FALSE)
 
 
 
@@ -38,16 +38,18 @@ table(otg_list_nonrel_filtpop$Superpopulation.code)
 
 library(treemap)
 
-group <- c(rep("Africa (1KGP) 533",2), rep("East Asia (1KGP) 319",2), 
-           rep("Europe (1KGP) 426",4), rep("South Asia (1KGP) 516"))
+group <- c(rep("Africa (1KGP) 533",5),  
+           rep("Europe (1KGP) 426",4),
+           rep("South Asia (1KGP) 516", 5),
+           rep("East Asia (1KGP) 319",3))
 
-subgroup <- c("Yoruba 121","Toscani 107", "Bengali 99", "CEPH 122", "Mandinka 2",
-              "Spanish 2", "Luhya 1", "Punjabi 4", "Bengali 2", "Esan 104", "Gujarati 103",
-              "Japanese 103", "Mende 88", "Southern Han Chinese 112", "British 89",
-              "Esan 2", "Han Chinese 103","Japanese 1", "Tamil 104", "British 2",
-              "Mandinka 117", "Iberian 104", "Luhya 98", "Punjabi 100", "Telugu 104")
+subgroup <- c("Yoruba 121", "Esan 106","Mandinka 119", "Luhya 99", "Mende 88",
+              "CEPH 122","Toscani 107", "British 91","Iberian 106",
+              "Punjabi 104",  "Gujarati 103", "Tamil 104", "Bengali 101", "Telugu 104",
+              "Japanese 104",  "Southern Han Chinese 112", "Han Chinese 103"
+          )
 
-value <- c(1, 3, 2, 2, 3, 2)
+value <- c(121, 106, 119, 99, 88, 122, 107,91, 106, 104, 103, 104, 101, 104, 104, 112, 103)
 data <- data.frame(group,subgroup,value)
 data
 
@@ -58,19 +60,18 @@ treemap(data, index=c("group","subgroup"),
         fontface.labels=c(2,1),                  # Font of labels: 1,2,3,4 for normal, bold, italic, bold-italic...
         bg.labels=c("transparent"),              # Background color of labels
         align.labels=list(
-          c("center", "center"), 
+          c("center", "top"), 
           c("center", "center")
         ),                                   # Where to place labels in the rectangle?
         overlap.labels=0.5,                      # number between 0 and 1 that determines the tolerance of the overlap between labels. 0 means that labels of lower levels are not printed if higher level labels overlap, 1  means that labels are always printed. In-between values, for instance the default value .5, means that lower level labels are printed if other labels do not overlap with more than .5  times their area size.
         inflate.labels=F,                        # If true, labels are bigger when rectangle is bigger.
         border.col=c("black","white"),             # Color of borders of groups, of subgroups, of subsubgroups ....
         border.lwds=c(3,2),                        # Width of colors
-        title="SDGP", 
-        fontsize.title=12
+        title="1KGP", 
+        fontsize.title=12,
+        palette = "Set1",
         
         
 )
-
-
 
 
