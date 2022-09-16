@@ -1,0 +1,5 @@
+#!/bin/bash
+for i in {3..20}; do
+  echo "filtering $i";
+  bcftools view -S /mnt/e/luchessi/OneTGenomes_30x_GRCh38/samplelist_onetg_filt_nonrel_pop.txt  -o /mnt/e/luchessi/OneTGenomes_30x_GRCh38/1kgp_chr${i}_filt.vcf  1kGP_high_coverage_Illumina.chr${i}.filtered.SNV_INDEL_SV_phased_panel.vcf.gz;
+done
